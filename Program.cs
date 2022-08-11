@@ -13,6 +13,7 @@ var services = builder.Services;
 var config = builder.Configuration;
 
 services.AddControllers();
+services.AddControllersWithViews();
 services.AddRazorPages();
 
 services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "auth server", Version = "v1" }));
@@ -107,12 +108,10 @@ services.AddOpenIddict()
 //     options.DefaultChallengeScheme = OpenIddictConstants.Schemes.Bearer;
 // });
 
-services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+services.AddAuthentication(options =>
 {
-    // options.AccessDeniedPath = "/Account/Login";
-    options.LoginPath = "/Account/Login";
-    options.LogoutPath = "/Account/Logout";
+    options.DefaultScheme = OpenIddictConstants.Schemes.Bearer;
+    options.DefaultChallengeScheme = OpenIddictConstants.Schemes.Bearer;
 });
 
 services.AddIdentity<ApplicationUser, ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -128,6 +127,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseExceptionHandler("/Error");
     app.UseHsts();
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();

@@ -8,18 +8,16 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+        <a id="index" class="nav-link text-dark" href="~/index">Hello @UserManager.GetUserName(User)!</a>
     </li>
     <li class="nav-item">
-        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
+        <a id="logout" class="nav-link text-dark" href="~/connect/logout">Logout</a>
     </li>
 }
 else
 {
     <li class="nav-item">
-        <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a id="login" class="nav-link text-dark" href="~/account/login">Login</a>
     </li>
 }
 </ul>
