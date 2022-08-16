@@ -1,0 +1,7 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = Model.Subject ?? "Error";
+}
+<div class="alert alert-danger" role="alert">
+    @Model.Message
+</div>

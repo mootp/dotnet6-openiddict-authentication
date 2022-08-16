@@ -1,0 +1,166 @@
+@model authServer.Models.ApplicationInputModel
+@{
+    ViewData["Title"] = "Edit Client";
+}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">Clients</a></li>
+        <li class="breadcrumb-item"><a asp-action="View" asp-route-id="@ViewBag.Client.Id">@Model.DisplayName</a></li>
+        <li class="breadcrumb-item active me-auto">Edit</li>
+        <li>
+            <a asp-action="Delete" asp-route-id="@ViewBag.Client.Id" class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-trash-fill"></i>
+            </a>
+        </li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header">Basic Info</div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="form-floating mb-3">
+                        <input asp-for="DisplayName" class="form-control" placeholder="Display Name" required>
+                        <label asp-for="DisplayName"></label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="ClientId" class="form-control" placeholder="Client Id" required>
+                        <label asp-for="ClientId"></label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <div class="input-group">
+                            <input asp-for="ClientSecret" class="form-control" placeholder="Client Secret">
+                            <button class="btn btn-secondary shadow-none" type="button" id="generateSecret">Generate</button>
+                        </div>
+                        <div class="form-text">Please save the client secret somewhere as you will NOT be able to retrieve it later.</div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea asp-for="RedirectUris" class="form-control" placeholder="Redirect URIs" style="height: 150px"></textarea>
+                        <label asp-for="RedirectUris"></label>
+                        <div class="form-text">Please put each URI on a separate line.</div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea asp-for="PostLogoutRedirectUris" class="form-control" placeholder="Post-Logout Redirect URIs"
+                                  style="height: 150px"></textarea>
+                        <label asp-for="PostLogoutRedirectUris"></label>
+                        <div class="form-text">Please put each URI on a separate line.</div>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input asp-for="IsPkce" class="form-check-input">
+                        <label asp-for="IsPkce" class="form-check-label"></label>
+                    </div>
+                    <input type="hidden" asp-for="IsNewClientSecret" />
+                    <a class="btn btn-outline-secondary me-2" asp-action="View" asp-route-id="@ViewBag.Client.Id"><i class="bi bi-x-lg"></i></a>
+                    <button type="submit" class="btn btn-outline-primary"><i class="bi bi-check-lg"></i></button>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+            <div class="card-header">Allowed Permissions</div>
+            <div class="card-body">
+                <form action="../AddPermission" method="post">
+                    <table class="table">
+                        <tbody>
+                            @foreach (var permission in ViewBag.Permissions)
+                            {
+                                <tr>
+                                    <td>@permission</td>
+                                    <td>
+                                        <a asp-action="RemovePermission" asp-route-clientId="@ViewBag.Client.Id"
+                                       asp-route-permission="@permission" class="delete btn btn-outline-danger btn-sm">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td>
+                                    <select name="permission" class="form-select">
+                                        <option></option>
+                                        @foreach (var permission in ViewBag.AvailablePermissions)
+                                        {
+                                            <option>@permission</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="hidden" name="clientId" value="@ViewBag.Client.Id" />
+                                    <button id="addPermissionBtn" class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+            <div class="card-header">Allowed Scopes</div>
+            <div class="card-body">
+                <form action="../AddScope" method="post">
+                    <table class="table">
+                        <tbody>
+                            @foreach (var scope in ViewBag.Scopes)
+                            {
+                                <tr>
+                                    <td>@scope</td>
+                                    <td>
+                                        <a asp-action="RemoveScope" asp-route-clientId="@ViewBag.Client.Id"
+                                       asp-route-scope="@scope" class="delete btn btn-outline-danger btn-sm">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td>
+                                    <select name="scope" class="form-select">
+                                        <option></option>
+                                        @foreach (var scope in ViewBag.AvailableScopes)
+                                        {
+                                            <option>@scope</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="hidden" name="clientId" value="@ViewBag.Client.Id" />
+                                    <button id="addScopeBtn" class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(function() {
+            $("#addScopeBtn").prop("disabled", true);
+            $("#addPermissionBtn").prop("disabled", true);
+            $("select").change(function() {
+                $("#addScopeBtn").prop("disabled", $(this).val() == "");
+                $("#addPermissionBtn").prop("disabled", $(this).val() == "");
+            });
+            $("#generateSecret").click(function() {
+                $.ajax({
+                    url: "../GenerateSecret",
+                    success: function(resp) {
+                        $("#ClientSecret").val(resp.secret);
+                        $("#IsNewClientSecret").val("True");
+                    }
+                });
+            })
+        });
+    </script>
+}

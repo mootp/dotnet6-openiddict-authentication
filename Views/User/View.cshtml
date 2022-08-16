@@ -1,0 +1,136 @@
+@model authServer.Entities.ApplicationUser
+@{
+    ViewData["Title"] = "View User";
+}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">Users</a></li>
+        <li class="breadcrumb-item active me-auto">@Model.DisplayName</li>
+        <li>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-pencil-fill"></i>
+            </a>
+        </li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header">Account</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-floating mb-3">
+                            <span class="form-control">@Model.FirstName</span>
+                            <label>First Name</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-floating mb-3">
+                            <span class="form-control">@Model.LastName</span>
+                            <label>Last Name</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <span class="form-control">@Model.DisplayName</span>
+                            <label>Display Name</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <span class="form-control">
+                                @if (Model.EmailConfirmed)
+                                {
+                                    <a href="mailto:@Model.Email">@Model.Email</a>
+                                }
+                                else
+                                {
+                                    @Model.Email
+                                }
+                            </span>
+                            <label>Email</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+            <div class="card-header">Roles</div>
+            <div class="card-body">
+                <form action="../AddRole" method="post">
+                    <table class="table">
+                        <tbody>
+                            @foreach (var role in ViewBag.Roles)
+                            {
+                                <tr>
+                                    <th>@role</th>
+                                    <td>
+                                        <a asp-action="RemoveRole" asp-route-userId="@Model.Id"
+                                       asp-route-role="@role"
+                                       class="delete btn btn-outline-danger btn-sm">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td>
+                                    <select name="role" class="form-select">
+                                        <option></option>
+                                        @foreach (var role in ViewBag.AvailableRoles)
+                                        {
+                                            <option>@role</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="hidden" name="userId" value="@Model.Id" />
+                                    <button class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+            <div class="card-header">Claims</div>
+            <div class="card-body">
+                <form action="../AddClaim" method="post">
+                    <table class="table">
+                        <tbody>
+                            @foreach (var claim in ViewBag.Claims)
+                            {
+                                <tr>
+                                    <th>@claim.Type</th>
+                                    <td>@claim.Value</td>
+                                    <td>
+                                        <a asp-action="RemoveClaim" asp-route-userId="@Model.Id"
+                                       asp-route-claimType="@claim.Type" asp-route-claimValue="@claim.Value"
+                                       class="delete btn btn-outline-danger btn-sm">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td><input name="claimType" type="text" class="form-control" /></td>
+                                <td><input name="claimValue" type="text" class="form-control" /></td>
+                                <td>
+                                    <input type="hidden" name="userId" value="@Model.Id" />
+                                    <button class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

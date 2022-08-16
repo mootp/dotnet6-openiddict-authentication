@@ -1,0 +1,49 @@
+@model authServer.Models.RegistrationInputModel
+@{
+    ViewData["Title"] = "New User";
+}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index">Users</a></li>
+        <li class="breadcrumb-item active">New User</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col col-lg-12 border bg-light p-3">
+        <form method="post">
+            <div class="form-floating mb-3">
+                <input asp-for="Username" class="form-control" placeholder="Username" required>
+                <label asp-for="Username"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="FirstName" class="form-control" placeholder="First Name" required>
+                <label asp-for="FirstName"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="LastName" class="form-control" placeholder="Last Name" required>
+                <label asp-for="LastName"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Email" class="form-control" placeholder="Email" required>
+                <label asp-for="Email"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Password" class="form-control" placeholder="Password" required>
+                <label asp-for="Password"></label>
+                <div class="form-text">
+                    Passwords must be at least 8 characters long, and contain at least one uppercase character,
+                    one lowercase character, a digit, and a non-alphanumeric character.
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" required>
+                <label asp-for="ConfirmPassword"></label>
+            </div>
+            <a class="btn btn-secondary me-2" asp-action="Index">Cancel</a>
+            <button type="submit" class="btn btn-primary">Add</button>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </form>
+    </div>
+</div>

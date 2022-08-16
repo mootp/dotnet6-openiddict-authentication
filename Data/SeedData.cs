@@ -1,4 +1,3 @@
-using authServer.Data;
 using authServer.Entities;
 using Microsoft.AspNetCore.Identity;
 using OpenIddict.Abstractions;
@@ -25,7 +24,9 @@ public static class SeedData
             ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
             RedirectUris =
             {
-                new Uri("https://oauth.pstmn.io/v1/callback")
+                new Uri("https://oauth.pstmn.io/v1/callback"),
+                new Uri("https://localhost:3000/callback"),
+                new Uri("https://localhost:4200/callback")
             },
             Permissions =
             {
@@ -33,8 +34,9 @@ public static class SeedData
                 OpenIddictConstants.Permissions.Endpoints.Logout,
                 OpenIddictConstants.Permissions.Endpoints.Token,
 
+                OpenIddictConstants.Permissions.GrantTypes.Password,
                 OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
-                 OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
+                OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
                 OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
 
                 OpenIddictConstants.Permissions.ResponseTypes.Code,
@@ -108,11 +110,11 @@ public static class SeedData
     public static async void Roles(IApplicationBuilder app)
     {
         var listScope = new List<ApplicationRole>();
-        listScope.Add(new ApplicationRole { Name = "system" });
-        listScope.Add(new ApplicationRole { Name = "admin" });
-        listScope.Add(new ApplicationRole { Name = "manager" });
-        listScope.Add(new ApplicationRole { Name = "leader" });
-        listScope.Add(new ApplicationRole { Name = "staff" });
+        listScope.Add(new ApplicationRole { Name = ApplicationConstants.RoleSystem });
+        listScope.Add(new ApplicationRole { Name = ApplicationConstants.RoleAdmin });
+        listScope.Add(new ApplicationRole { Name = ApplicationConstants.RoleManager });
+        listScope.Add(new ApplicationRole { Name = ApplicationConstants.RoleLeader });
+        listScope.Add(new ApplicationRole { Name = ApplicationConstants.RoleStaff });
 
         using var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
@@ -128,7 +130,7 @@ public static class SeedData
     public static async void Users(IApplicationBuilder app)
     {
         var listUser = new List<ApplicationUser>();
-        listUser.Add(new ApplicationUser { UserName = "sysadmin", });
+        listUser.Add(new ApplicationUser { UserName = "sysadmin", FirstName = "System", LastName = "Admin" });
 
         using var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
 
@@ -139,7 +141,7 @@ public static class SeedData
             if (existing == null)
             {
                 await userManager.CreateAsync(item, "P@ssw0rdSys");
-                await userManager.AddToRoleAsync(item, "system");
+                await userManager.AddToRoleAsync(item, ApplicationConstants.RoleSystem);
             }
         }
 

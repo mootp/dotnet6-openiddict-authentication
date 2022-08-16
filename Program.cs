@@ -1,7 +1,6 @@
-using System.Security.Principal;
 using authServer.Data;
 using authServer.Entities;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using authServer.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -14,7 +13,6 @@ var config = builder.Configuration;
 
 services.AddControllers();
 services.AddControllersWithViews();
-services.AddRazorPages();
 
 services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "auth server", Version = "v1" }));
 
@@ -102,12 +100,6 @@ services.AddOpenIddict()
     options.EnableAuthorizationEntryValidation();
 });
 
-// services.AddAuthentication(options =>
-// {
-//     options.DefaultScheme = OpenIddictConstants.Schemes.Bearer;
-//     options.DefaultChallengeScheme = OpenIddictConstants.Schemes.Bearer;
-// });
-
 services.AddAuthentication(options =>
 {
     options.DefaultScheme = OpenIddictConstants.Schemes.Bearer;
@@ -118,6 +110,12 @@ services.AddIdentity<ApplicationUser, ApplicationRole>(options => options.SignIn
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager();
 
+
+services.AddAutoMapper(config => config.AddProfile<MapperProfile>());
+services.AddAuthorization(options => options.AddPolicy(ApplicationConstants.Policy.IsSystem, policy => policy.RequireRole(ApplicationConstants.RoleSystem)));
+services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/Account/AccessDenied");
+services.AddScoped<UserService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -125,8 +123,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+    app.UseExceptionHandler("/Home/Error");
     app.UseDeveloperExceptionPage();
 }
 
@@ -142,7 +139,9 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapRazorPages();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 SeedData.Database(app);
 SeedData.Clients(app);

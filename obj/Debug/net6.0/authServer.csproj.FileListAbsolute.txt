@@ -278,12 +278,12 @@ C:\moo\code\dotnet\authServer\obj\Debug\net6.0\authServer.RazorAssemblyInfo.cach
 C:\moo\code\dotnet\authServer\obj\Debug\net6.0\authServer.RazorAssemblyInfo.cs
 C:\moo\code\dotnet\authServer\obj\Debug\net6.0\staticwebassets.build.json
 C:\moo\code\dotnet\authServer\obj\Debug\net6.0\staticwebassets.development.json
-C:\moo\code\dotnet\authServer\obj\Debug\net6.0\scopedcss\Pages\Shared\_Layout.cshtml.rz.scp.css
 C:\moo\code\dotnet\authServer\obj\Debug\net6.0\scopedcss\bundle\authServer.styles.css
-C:\moo\code\dotnet\authServer\obj\Debug\net6.0\scopedcss\projectbundle\authServer.bundle.scp.css
 C:\moo\code\dotnet\authServer\obj\Debug\net6.0\authServer.csproj.CopyComplete
 C:\moo\code\dotnet\authServer\obj\Debug\net6.0\authServer.dll
 C:\moo\code\dotnet\authServer\obj\Debug\net6.0\refint\authServer.dll
 C:\moo\code\dotnet\authServer\obj\Debug\net6.0\authServer.pdb
 C:\moo\code\dotnet\authServer\obj\Debug\net6.0\authServer.genruntimeconfig.cache
 C:\moo\code\dotnet\authServer\obj\Debug\net6.0\ref\authServer.dll
+C:\moo\code\dotnet\authServer\bin\Debug\net6.0\AutoMapper.dll
+C:\moo\code\dotnet\authServer\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

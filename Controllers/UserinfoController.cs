@@ -27,7 +27,7 @@ public class UserinfoController : Controller
         if (user is null)
         {
             return Challenge(
-              properties: new AuthenticationProperties(new Dictionary<string, string?>
+              properties: new AuthenticationProperties(new Dictionary<string, string>
               {
                   [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidToken,
                   [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =

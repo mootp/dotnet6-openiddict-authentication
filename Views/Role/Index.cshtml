@@ -1,0 +1,34 @@
+@model List<authServer.Entities.ApplicationRole>
+@{
+    ViewData["Title"] = "Roles";
+}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active me-auto">Roles</li>
+        <li><a asp-action="Add" class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg"></i></a></li>
+    </ol>
+</nav>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model)
+        {
+            <tr>
+                <td><a asp-action="View" asp-route-id="@role.Id">@role.Name</a></td>
+                <td>@role.Description</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@role.Id" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-pencil-fill"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
